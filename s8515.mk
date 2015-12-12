@@ -14,17 +14,19 @@
 # limitations under the License.
 #
 
-# This device is xhdpi
-PRODUCT_AAPT_CONFIG += normal hdpi xhdpi
-PRODUCT_AAPT_PREF_CONFIG := xhdpi
-
-$(call inherit-product, frameworks/native/build/phone-xhdpi-1024-dalvik-heap.mk)
-
+$(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
 $(call inherit-product-if-exists, vendor/nvidia/s8515/s8515-vendor.mk)
 
 # Overlay
 DEVICE_PACKAGE_OVERLAYS += \
-    device/nvidia/s8515/overlay
+    $(LOCAL_PATH)/overlay
+
+PRODUCT_TAGS += dalvik.gc.type-precise
+$(call inherit-product, frameworks/native/build/phone-xhdpi-1024-dalvik-heap.mk)
+
+# This device is xhdpi
+PRODUCT_AAPT_CONFIG += normal hdpi xhdpi
+PRODUCT_AAPT_PREF_CONFIG := xhdpi
 
 LOCAL_PATH := device/nvidia/s8515
 
@@ -33,153 +35,112 @@ PRODUCT_COPY_FILES += \
 	$(LOCAL_PATH)/root/fstab.ceres:root/fstab.ceres \
 	$(LOCAL_PATH)/root/init.ceres.rc:root/init.ceres.rc \
 	$(LOCAL_PATH)/root/init.nv_dev_board.usb.rc:root/init.nv_dev_board.usb.rc \
+	$(LOCAL_PATH)/root/init.icera_ceres.rc:root/init.icera_ceres.rc \
+	$(LOCAL_PATH)/root/init.icera.common.rc:root/init.icera.common.rc \
+	$(LOCAL_PATH)/root/init.modem_icera.rc:root/init.modem_icera.rc \
+	$(LOCAL_PATH)/root/init.icera.phone.rc:root/init.icera.phone.rc \
 	$(LOCAL_PATH)/root/ueventd.ceres.rc:root/ueventd.ceres.rc \
 	$(LOCAL_PATH)/root/init.hdcp.rc:root/init.hdcp.rc \
 	$(LOCAL_PATH)/root/init_charging.rc:root/init_charging.rc \
 	$(LOCAL_PATH)/root/swapsd.sh:root/swapsd.sh
+# TWRP
+PRODUCT_COPY_FILES += \
+	$(LOCAL_PATH)/recovery/twrp.fstab:recovery/root/etc/twrp.fstab
+
+# Enable repeatable keys in CWM
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.cwm.enable_key_repeat=true
 
 # Permissions
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.bluetooth_le.xml:system/etc/permissions/android.hardware.bluetooth_le.xml \
-    frameworks/native/data/etc/android.hardware.camera.autofocus.xml:system/etc/permissions/android.hardware.camera.autofocus.xml \
+    frameworks/native/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml \
     frameworks/native/data/etc/android.hardware.camera.flash-autofocus.xml:system/etc/permissions/android.hardware.camera.flash-autofocus.xml \
     frameworks/native/data/etc/android.hardware.camera.front.xml:system/etc/permissions/android.hardware.camera.front.xml \
-    frameworks/native/data/etc/android.hardware.camera.xml:system/etc/permissions/android.hardware.camera.xml \
-	frameworks/native/data/etc/android.hardware.ethernet.xml:system/etc/permissions/android.hardware.ethernet.xml \
+    frameworks/native/data/etc/android.hardware.telephony.gsm.xml:system/etc/permissions/android.hardware.telephony.gsm.xml \
     frameworks/native/data/etc/android.hardware.location.gps.xml:system/etc/permissions/android.hardware.location.gps.xml \
-    frameworks/native/data/etc/android.hardware.opengles.aep.xml:system/etc/permissions/android.hardware.opengles.aep.xml \
-    frameworks/native/data/etc/android.hardware.sensor.accelerometer.xml:system/etc/permissions/android.hardware.sensor.accelerometer.xml \
-    frameworks/native/data/etc/android.hardware.sensor.compass.xml:system/etc/permissions/android.hardware.sensor.compass.xml \
-    frameworks/native/data/etc/android.hardware.sensor.gyroscope.xml:system/etc/permissions/android.hardware.sensor.gyroscope.xml \
+    frameworks/native/data/etc/android.hardware.wifi.xml:system/etc/permissions/android.hardware.wifi.xml \
+    frameworks/native/data/etc/android.hardware.sensor.proximity.xml:system/etc/permissions/android.hardware.sensor.proximity.xml \
     frameworks/native/data/etc/android.hardware.sensor.light.xml:system/etc/permissions/android.hardware.sensor.light.xml \
+    frameworks/native/data/etc/android.hardware.sensor.gyroscope.xml:system/etc/permissions/android.hardware.sensor.gyroscope.xml \
+    frameworks/native/data/etc/android.hardware.nfc.xml:system/etc/permissions/android.hardware.nfc.xml \
+    frameworks/native/data/etc/android.hardware.nfc.hce.xml:system/etc/permissions/android.hardware.nfc.hce.xml \
+    frameworks/base/nfc-extras/com.android.nfc_extras.xml:system/etc/permissions/com.android.nfc_extras.xml \
+    frameworks/native/data/etc/com.nxp.mifare.xml:system/etc/permissions/com.nxp.mifare.xml \
+    frameworks/native/data/etc/android.software.sip.voip.xml:system/etc/permissions/android.software.sip.voip.xml \
     frameworks/native/data/etc/android.hardware.touchscreen.multitouch.jazzhand.xml:system/etc/permissions/android.hardware.touchscreen.multitouch.jazzhand.xml \
     frameworks/native/data/etc/android.hardware.usb.accessory.xml:system/etc/permissions/android.hardware.usb.accessory.xml \
-    frameworks/native/data/etc/android.hardware.usb.host.xml:system/etc/permissions/android.hardware.usb.host.xml \
-    frameworks/native/data/etc/android.hardware.wifi.direct.xml:system/etc/permissions/android.hardware.wifi.direct.xml \
-    frameworks/native/data/etc/android.hardware.wifi.xml:system/etc/permissions/android.hardware.wifi.xml \
-	frameworks/native/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml \
-    frameworks/native/data/etc/android.hardware.telephony.gsm.xml:system/etc/permissions/android.hardware.telephony.gsm.xml \
-    frameworks/native/data/etc/android.hardware.sensor.proximity.xml:system/etc/permissions/android.hardware.sensor.proximity.xml \
-    frameworks/native/data/etc/android.software.sip.xml:system/etc/permissions/android.software.sip.xml \
-    frameworks/native/data/etc/android.software.sip.voip.xml:system/etc/permissions/android.software.sip.voip.xml
-
-# NVIDIA
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/permissions/com.nvidia.feature.xml:system/etc/permissions/com.nvidia.feature.xml \
-    $(LOCAL_PATH)/permissions/com.nvidia.nvsi.xml:system/etc/permissions/com.nvidia.nvsi.xml
-
-# idc
-PRODUCT_COPY_FILES += \
-  $(LOCAL_PATH)/idc/touch.idc:system/usr/idc/touch.idc \
-  $(LOCAL_PATH)/idc/sensor00fn11.idc:system/usr/idc/sensor00fn11.idc
-
-# keylayout
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/keylayout/tegra-kbc.kl:system/usr/keylayout/tegra-kbc.kl \
-    $(LOCAL_PATH)/keylayout/gpio-keys.kl:system/usr/keylayout/gpio-keys.kl \
-    $(LOCAL_PATH)/keylayout/Vendor_0955_Product_7210.kl:system/usr/keylayout/Vendor_0955_Product_7210.kl
-
-# Media config
-PRODUCT_COPY_FILES += \
-    frameworks/av/media/libstagefright/data/media_codecs_google_audio.xml:system/etc/media_codecs_google_audio.xml \
-    frameworks/av/media/libstagefright/data/media_codecs_google_video.xml:system/etc/media_codecs_google_video.xml \
-    frameworks/av/media/libstagefright/data/media_codecs_ffmpeg.xml:system/etc/media_codecs_ffmpeg.xml \
-    $(LOCAL_PATH)/media/media_codecs.xml:system/etc/media_codecs.xml \
-    $(LOCAL_PATH)/media/media_profiles.xml:system/etc/media_profiles.xml
+    frameworks/native/data/etc/android.hardware.wifi.direct.xml:system/etc/permissions/android.hardware.wifi.direct.xml
 
 # Audio
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/audio/audioConfig_qvoice_icera_pc400.xml:system/etc/audioConfig_qvoice_icera_pc400.xml \
-    $(LOCAL_PATH)/audio/audio_policy.conf:system/etc/audio_policy.conf \
-    $(LOCAL_PATH)/audio/nvaudio_conf.xml:system/etc/nvaudio_conf.xml \
-    $(LOCAL_PATH)/audio/nvaudio_fx.xml:system/etc/nvaudio_fx.xml
+	$(LOCAL_PATH)/media/media_codecs.xml:system/etc/media_codecs.xml \
+	$(LOCAL_PATH)/media/media_profiles.xml:system/etc/media_profiles.xml \
+	$(LOCAL_PATH)/media/nvaudio_conf.xml:system/etc/nvaudio_conf.xml \
+	$(LOCAL_PATH)/audio/conf/alsa.conf:system/usr/share/alsa/alsa.conf \
+	$(LOCAL_PATH)/audio/conf/pcm/dsnoop.conf:system/usr/share/alsa/pcm/dsnoop.conf \
+	$(LOCAL_PATH)/audio/conf/pcm/modem.conf:system/usr/share/alsa/pcm/modem.conf \
+	$(LOCAL_PATH)/audio/conf/pcm/dpl.conf:system/usr/share/alsa/pcm/dpl.conf \
+	$(LOCAL_PATH)/audio/conf/pcm/default.conf:system/usr/share/alsa/pcm/default.conf \
+	$(LOCAL_PATH)/audio/conf/pcm/surround51.conf:system/usr/share/alsa/pcm/surround51.conf \
+	$(LOCAL_PATH)/audio/conf/pcm/surround41.conf:system/usr/share/alsa/pcm/surround41.conf \
+	$(LOCAL_PATH)/audio/conf/pcm/surround50.conf:system/usr/share/alsa/pcm/surround50.conf \
+	$(LOCAL_PATH)/audio/conf/pcm/dmix.conf:system/usr/share/alsa/pcm/dmix.conf \
+	$(LOCAL_PATH)/audio/conf/pcm/center_lfe.conf:system/usr/share/alsa/pcm/center_lfe.conf \
+	$(LOCAL_PATH)/audio/conf/pcm/surround40.conf:system/usr/share/alsa/pcm/surround40.conf \
+	$(LOCAL_PATH)/audio/conf/pcm/side.conf:system/usr/share/alsa/pcm/side.conf \
+	$(LOCAL_PATH)/audio/conf/pcm/iec958.conf:system/usr/share/alsa/pcm/iec958.conf \
+	$(LOCAL_PATH)/audio/conf/pcm/rear.conf:system/usr/share/alsa/pcm/rear.conf \
+	$(LOCAL_PATH)/audio/conf/pcm/surround71.conf:system/usr/share/alsa/pcm/surround71.conf \
+	$(LOCAL_PATH)/audio/conf/pcm/front.conf:system/usr/share/alsa/pcm/front.conf \
+	$(LOCAL_PATH)/audio/conf/cards/aliases.conf:system/usr/share/alsa/cards/aliases.conf
+
+# Proprietary blobs
+PRODUCT_COPY_FILES += \
+	$(LOCAL_PATH)/blobs/bin/powerservice:system/bin/powerservice \
+	$(LOCAL_PATH)/blobs/etc/power.ceres.rc:system/etc/power.ceres.rc \
+	$(LOCAL_PATH)/blobs/lib/hw/audio_policy.tegra.so:system/lib/hw/audio_policy.tegra.so \
+	$(LOCAL_PATH)/blobs/lib/hw/camera.tegra.so:system/lib/hw/camera.tegra.so \
+	$(LOCAL_PATH)/blobs/vendor/lib/hw/power.ceres.so:system/vendor/lib/hw/power.ceres.so
 
 PRODUCT_PACKAGES += \
-    audio.a2dp.default \
-    audio.usb.default \
-    audio.r_submix.default \
-    libaudio-resampler \
-    libaudiospdif \
-    libtinycompress \
-    tinycap \
-    tinymix \
-    tinyplay \
-    xaplay
+	com.android.future.usb.accessory
 
-# GPS
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/gps/gpsconfig.xml:system/etc/gps/gpsconfig.xml \
-    $(LOCAL_PATH)/gps/gps.conf:system/etc/gps.conf
-
-# Bluetooth
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/bluetooth/bt_vendor.conf:system/etc/bluetooth/bt_vendor.conf
-
-# Camera
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/camera/nvcamera.conf:system/etc/nvcamera.conf \
-    $(LOCAL_PATH)/camera/model_frontal.xml:system/etc/model_frontal.xml
-
-# Wifi
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/wifi/dhcpcd.conf:system/etc/dhcpcd/dhcpcd.conf
+# NFC packages
+PRODUCT_PACKAGES += \
+    com.android.nfc_extras \
+    libnfc \
+    libnfc_jni \
+    Nfc \
+    Tag
 
 PRODUCT_PACKAGES += \
-    hostapd \
-    wpa_supplicant \
-    wpa_supplicant.conf
-
-# Enable Widevine drm
-PRODUCT_PROPERTY_OVERRIDES += drm.service.enabled=true
+    libnetcmdiface
 
 # Light
 PRODUCT_PACKAGES += \
-    lights.ceres
+	lights.ceres
 
 # Charger
 PRODUCT_PACKAGES += \
     charger \
     charger_res_images
 
-PRODUCT_CHARACTERISTICS := default
-
-# Set default USB interface
-PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
-    persist.sys.usb.config=mtp
-
-# Enable USB OTG interface
-PRODUCT_PROPERTY_OVERRIDES += \
-    persist.sys.isUsbOtgEnabled=1
-
-# USB
-PRODUCT_PACKAGES += \
-    com.android.future.usb.accessory
-
 # Filesystem management tools
 PRODUCT_PACKAGES += \
+    make_ext4fs \
     setup_fs
 
-# Ramdisk
-PRODUCT_PACKAGES += \
-    init.icera.common.rc \
-    init.icera.phone.rc \
-    init.icera_ceres.rc \
-	init.modem_icera.rc
-
-# Radio Interface
-PRODUCT_PACKAGES += rild
-
-# Common build.props
+# Enable Widevine drmcd .
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.opengles.version = 131072 \
-    wifi.interface=wlan0 \
-    ap.interface=wlan0 \
-    persist.tegra.nvmmlite = 1 \
-    persist.wlan.ti.calibrated = 0 \
-    ro.sf.override_null_lcd_density = 1 \
-    ro.sf.lcd_density=320 \
-    persist.tegra.compositor=glcomposer \
-    ro.input.noresample=1 \
-    ro.com.google.clientidbase=android-nvidia \
-    ro.zygote.disable_gl_preload=true \
-    af.resampler.quality = 4
+	drm.service.enabled=true
+
+# Disable SELinux
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.boot.selinux=disabled
+
+PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0
+PRODUCT_NAME := full_s8515
+PRODUCT_DEVICE := s8515
+PRODUCT_MODEL := WAX CM12
+PRODUCT_MANUFACTURER := NVIDIA
