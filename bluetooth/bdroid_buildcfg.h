@@ -17,6 +17,9 @@
 #ifndef _BDROID_BUILDCFG_H
 #define _BDROID_BUILDCFG_H
 
-#define BTM_DEF_LOCAL_NAME "SHIELD Tablet"
+#define BTM_DEF_LOCAL_NAME "Wax CM12""
+#define BTA_DISABLE_DELAY 1000 /* in milliseconds */
+#define BTA_HOST_INTERLEAVE_SEARCH TRUE
+#define BTA_SKIP_BLE_READ_REMOTE_FEAT TRUE
 
 #endif
